@@ -27,6 +27,7 @@ type User {
         signUpUser(userNew: UserInput!): User
         addBook(bookInput: BookInput): Book!
         login(userSignIn:SignInInput!): AuthPayload
+        deleteBook(id:ID!):Book!
     }
     input BookInput {
         title: String!
