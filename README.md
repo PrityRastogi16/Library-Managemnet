@@ -2,7 +2,7 @@
 
 Welcome to the Library Management System, a comprehensive solution for managing your library's resources efficiently. This system offers a wide range of features tailored to meet the needs of both users and administrators.
 
-### Deployed link- https://library-managemnet.onrender.com
+### Deployed link- https://library-managemnet.onrender.com/graphql
 ### Read Document to know more about queries: https://documenter.getpostman.com/view/31788909/2sA2xnxpqv
 ## Features
 
