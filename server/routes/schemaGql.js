@@ -16,8 +16,9 @@ type Book {
     author: String!
     description: String!
     rentPrice: Float    
-    buyPrice: Float    
-    owner: User    
+    buyPrice: Float
+    status: String    
+    owner: User   
 }
     type AuthPayload {
         token: String!
@@ -38,6 +39,7 @@ type Book {
         logout: String!
         buyBook(bookId: ID!): Book!
         rentBook(bookId: ID!): Book! 
+        returnBook(bookId: ID!): Book!
         
     }
     input BookInput {
@@ -46,6 +48,7 @@ type Book {
         description: String!
         rentPrice: Float
         buyPrice: Float
+        status: String   
     }
     
     input UserInput{

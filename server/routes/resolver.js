@@ -4,11 +4,12 @@ const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken");
 const {RedisClient} = require("../controllers/redis.middleware");
 const nodemailer = require("nodemailer");
+require("dotenv").config();
 const transporter = nodemailer.createTransport({
     service:'gmail',
     auth: {
         user: 'prityss7991@gmail.com',
-        pass: 'ralg llmu ncil dkbj',
+        pass: 'process.env.otp-pass'
     },
 });
 
@@ -154,47 +155,104 @@ const resolvers = {
            },
 
           //  Rent or Buy Books
-          rentBook: async (_, { id }, { user }) => {
+          rentBook: async (_, { bookId }, { user }) => {
             if (!user) {
               throw new Error("Unauthorized: User not logged in");
             }
       
             try {
-              const book = await BookModel.findById(id);
+              const book = await BookModel.findById(bookId);
               if (!book) {
                 throw new Error("Book not found");
               }
-              user.booksOwned.push(book);
-              await user.save();
-      
-              return book;
+              if (book.status === "sold") {
+                throw new Error("Book is already sold");
+            } else if (book.status === "rented") {
+                throw new Error("Book is already rented");
+            }
+    
+            // Update the status of the book to "sold"
+            book.status = "rented";
+    
+            // Push the book to the user's booksOwned array
+            user.booksOwned.push(book);
+    
+            // Save changes to the user and the book
+            await user.save();
+            await book.save();
+    
+            return book;
             } catch (error) {
               console.error("Error renting book:", error.message);
-              throw new Error("Failed to rent book");
+              throw new Error("Book Not Available");
             }
           },
-          buyBook: async (_, { id }, { user }) => {
+          buyBook: async (_, { bookId }, { user }) => {
             if (!user) {
               throw new Error("Unauthorized: User not logged in");
             }
-      
             try {
-              // Find the book by ID
-              const book = await BookModel.findById(id);
+              const book = await BookModel.findById(bookId);
               if (!book) {
                 throw new Error("Book not found");
               }
-              user.booksOwned.push(book);
-              await user.save();
-      
-              return book;
+              if (book.status === "sold") {
+                throw new Error("Book is already sold");
+            } else if (book.status === "rented") {
+                throw new Error("Book is already rented");
+            }
+    
+            // Update the status of the book to "sold"
+            book.status = "sold";
+    
+            // Push the book to the user's booksOwned array
+            user.booksOwned.push(book);
+    
+            // Save changes to the user and the book
+            await user.save();
+            await book.save();
+    
+            return book;
             } catch (error) {
-              console.error("Error buying book:", error.message);
-              throw new Error("Failed to buy book");
+              console.error("Error Sold book:", error.message);
+              throw new Error("Book Not Available");
             }
           }, 
+// RETURN BOOK
+returnBook: async (_, { bookId }, { user }) => {
+  if (!user) {
+      throw new Error("Unauthorized: User not logged in");
+  }
+
+  try {
+      // Find the book by ID
+      const book = await BookModel.findById(bookId);
+      if (!book) {
+          throw new Error("Book not found");
+      }
+      if (!user.booksOwned.includes(bookId)) {
+          throw new Error("Book is not rented by the user");
+      }
+
+      // Update the status of the book to "available"
+      book.status = "available";
+
+      // Remove the book from the user's booksOwned array
+      user.booksOwned = user.booksOwned.filter(id => id !== bookId);
+
+      // Save changes to the user and the book
+        await user.save();
+        await book.save();
+
+        return book;
+     } catch (error) {
+      console.error("Error returning book:", error.message);
+      throw new Error("Failed to return book: " + error.message);
+     }
+   },
+
       
-        }
+  }
 };
 
 

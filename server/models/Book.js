@@ -6,6 +6,7 @@ const bookSchema = new mongoose.Schema({
   description: String,
     rentPrice: Number,
     buyPrice: Number,
+    status: {type:String, enum:["available", "rented", "sold"], default:"available"},
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
