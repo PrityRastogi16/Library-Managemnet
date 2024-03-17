@@ -9,27 +9,42 @@ const cors = require('cors');
 const {expressMiddleware} = require('@apollo/server/express4');
 const { default: axios } = require('axios');
 const jwt = require("jsonwebtoken");
+const {RedisClient}= require("./controllers/redis.middleware");
+
 
 // Create an ApolloServer instance
 const server = new ApolloServer({ typeDefs, resolvers,
     context: async({ req }) => {
-        // Extract token from request headers
         const token = req.headers.authorization || "";
+
         let user = null;
+
         try {
-          const decodedToken = jwt.verify(token, "prity");
-          const userId = decodedToken.userId;
-          user = await UserModel.findById(userId);
+            const cachedToken = await RedisClient.get("key");
+
+            if (cachedToken) {
+                const decodedToken = jwt.verify(cachedToken, "prity");
+                const userId = decodedToken.userId;
+                user = await UserModel.findById(userId);
+            } 
+            else {
+                const decodedToken = jwt.verify(token, "prity");
+                const userId = decodedToken.userId;
+                user = await UserModel.findById(userId);
+                await RedisClient.set(token, token, 'EX', 3600);
+            }
         } catch (error) {
-          console.error("Error decoding token:", error.message);
+            console.error("Error decoding token:", error.message);
         }
+
         return { user };
       }
 });
 
+
+
 // Create Express application
 const app=express();
-// await server.applyMiddleware({ app });
 app.use(express.json());
 
 // Apply Apollo middleware
@@ -38,7 +53,7 @@ async function applyApolloMiddleware() {
     server.applyMiddleware({ app });
 }
 
-// Apply Express middleware and start the server
+// Apply Express middleware
 async function startServer() {
     await applyApolloMiddleware();
     app.use('/graphql',expressMiddleware(server));

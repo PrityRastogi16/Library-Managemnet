@@ -5,6 +5,10 @@ const userSchema = new mongoose.Schema({
   email: String,
   password: String,
   role: String,
+  booksOwned: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Book',
+  }],
 });
 
 const UserModel = mongoose.model('User', userSchema);
