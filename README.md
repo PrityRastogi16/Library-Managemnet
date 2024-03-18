@@ -4,6 +4,17 @@ Welcome to the Library Management System, a comprehensive solution for managing 
 
 ### Deployed link- https://library-managemnet.onrender.com/graphql
 ### Read Document to know more about queries: https://documenter.getpostman.com/view/31788909/2sA2xnxpqv
+
+### Admin Credentials
+
+- **email**: prity@gmail.com
+- **Password**: 123456
+
+### User Credentials
+
+- **email**: user@gmail.com
+- **Password**: 123456
+
 ## Features
 
 1. **User Authentication**
