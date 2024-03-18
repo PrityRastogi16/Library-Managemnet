@@ -40,12 +40,237 @@ Welcome to the Library Management System, a comprehensive solution for managing 
 
 ## Get Started
 
-Ready to explore the Library Management System? Follow these steps to get started:
+#### Available Routes
 
-1. **Signup**: Create a new account to access the system's features.
-2. **Signin**: Log in using your registered credentials.
-3. **Browse Books**: Explore the collection of books available in the library.
-4. **Purchase/Rent Books**: Select your desired books and complete the purchase or rental process.
-5. **Admin Operations**: If you're an admin, access the admin dashboard to manage books effectively.
+**Queries**
 
+- **books**
+  - Endpoint: `/graphql`
+  - Method: `POST`
+  - Description: Retrieves a list of all books.
+  - Authorization: Required
+  - Example Query:
+    ```graphql
+    query {
+      getbooks {
+        id
+        title
+        author
+        description
+        rentPrice
+        buyPrice
+        status
+      }
+    }
+    ```
+
+- **users**
+  - Endpoint: `/graphql`
+  - Method: `POST`
+  - Description: Retrieves a list of all users.
+  - Authorization: Required
+  - Example Query:
+    ```graphql
+    query {
+      getusers {
+        id
+        username
+        email
+        password
+        role
+       status
+      }
+    }
+    ```
+
+**Mutations**
+
+- **addBook**
+  - Endpoint: `/graphql`
+  - Method: `POST`
+  - Description: Adds a new book to the system.
+  - Authorization: Required
+  - Example Mutation:
+    ```graphql
+    mutation {
+      addBook(bookInput: {
+        title: "Book Title",
+        author: "Author Name",
+        description: "Book Description",
+        rentPrice: 9.65,
+        buyPrice: 199.44
+      }) {
+        id
+        title
+        author
+        description
+        rentPrice
+        buyPrice
+        status
+      }
+    }
+    ```
+
+- **deleteBook**
+  - Endpoint: `/graphql`
+  - Method: `POST`
+  - Description: Deletes a book from the system.
+  - Authorization: Required
+  - Example Mutation:
+    ```graphql
+    mutation {
+      deleteBook(id: "book_id_here") {
+        id
+        title
+        author
+      }
+    }
+    ```
+
+- **updateBook**
+  - Endpoint: `/graphql`
+  - Method: `POST`
+  - Description: Updates a book in the system.
+  - Authorization: Required
+  - Example Mutation:
+    ```graphql
+    mutation {
+      updateBook(id: "book_id_here", edits: {
+        title: "New Book Title",
+        author: "New Author Name",
+        description: "New Book Description",
+        rentPrice: 6.99,
+        buyPrice: 24.99,
+        status: "Available"
+      }) {
+        id
+        title
+        author
+        description
+        rentPrice
+        buyPrice
+        status
+      }
+    }
+    ```
+
+- **buyBook**
+  - Endpoint: `/graphql`
+  - Method: `POST`
+  - Description: Allows a user to buy a book.
+  - Authorization: Required
+  - Example Mutation:
+    ```graphql
+    mutation {
+      buyBook(bookId: "book_id_here") {
+        id
+        title
+        author
+        description
+        rentPrice
+        buyPrice
+        status
+      }
+    }
+    ```
+
+- **rentBook**
+  - Endpoint: `/graphql`
+  - Method: `POST`
+  - Description: Allows a user to rent a book.
+  - Authorization: Required
+  - Example Mutation:
+    ```graphql
+    mutation {
+      rentBook(bookId: "book_id_here") {
+        id
+        title
+        author
+        description
+        rentPrice
+        buyPrice
+        status
+      }
+    }
+    ```
+
+- **returnBook**
+  - Endpoint: `/graphql`
+  - Method: `POST`
+  - Description: Allows a user to return a rented book.
+  - Authorization: Required
+  - Example Mutation:
+    ```graphql
+    mutation {
+      returnBook(bookId: "book_id_here") {
+        id
+        title
+        author
+        description
+        rentPrice
+        buyPrice
+        status
+      }
+    }
+    ```
+
+- **register**
+  - Endpoint: `/graphql`
+  - Method: `POST`
+  - Description: Registers a new user.
+  - Authorization: Not required
+  - Example Mutation:
+    ```graphql
+    mutation {
+      signUpUser(userInput: {
+        name: "Prity",
+        email: "prity@example.com",
+        password: "password",
+        role: "admin"
+      }) {
+        id
+        username
+        email
+        role
+      }
+    }
+    ```
+
+- **login**
+  - Endpoint: `/graphql`
+  - Method: `POST`
+  - Description: Logs in a user and generates access tokens.
+  - Authorization: Not required
+  - Example Mutation:
+    ```graphql
+    mutation {
+      login(email: "john@example.com", password: "password") {
+        token
+        user {
+          id
+          name
+          email
+        }
+      }
+    }
+    ```
+
+- **logout**
+  - Endpoint: `/graphql`
+  - Method: `POST`
+  - Description: Logs out a user by blacklisting access tokens.
+  - Authorization: Required
+  - Example Mutation:
+    ```graphql
+    mutation {
+      logout
+    }
+    ```
+
+## Technology Stack
+
+- **Node.js**: Backend JavaScript runtime.
+- **Express.js**: Web application framework for Node.js.
+- **Apollo Server Express**: GraphQL server for Node.js.
+- **MongoDB**: NoSQL database for data storage.
 Thank you for choosing our platform!
