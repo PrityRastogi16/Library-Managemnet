@@ -1,9 +1,9 @@
 const express = require('express');
-const { connectDB } = require("./utils/dbConnect");
+const { connectDB } = require("./dbConnect");
 const { ApolloServer, gql } = require("apollo-server-express");
 const bodyParser = require('body-parser');
-const typeDefs = require("./routes/schemaGql")
-const resolvers = require("./routes/resolver")
+const typeDefs = require("./typedefs/schemaGql")
+const resolvers = require("./resolvers/resolver")
 const {UserModel} = require("./models/User");
 const cors = require('cors');
 const {expressMiddleware} = require('@apollo/server/express4');
